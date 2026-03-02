@@ -12,9 +12,7 @@ async function authUser(req, res, next) {
     });
   }
 
-  const isTokenBlackListed = await blacklistModel.findOne({
-    token,
-  });
+  const isTokenBlackListed = await redis.get(token);
 
   if (isTokenBlackListed) {
     return res.status(401).json({
