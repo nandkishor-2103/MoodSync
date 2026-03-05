@@ -1,0 +1,20 @@
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background: #4e73df;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+
+    &:hover {
+        background: #2e59d9;
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}

@@ -1,0 +1,13 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="moodGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#6366F1" />
+            <stop offset="100%" stop-color="#14B8A6" />
+        </linearGradient>
+    </defs>
+    <rect width="32" height="32" rx="6" fill="url(#moodGradient)" />
+
+    <path d="M16 24.5L14.5 23.1C9.2 18.3 6 15.1 6 11.5C6 8.5 8.5 6 11.5 6C13.2 6 14.8 6.8 16 8.1C17.2 6.8 18.8 6 20.5 6C23.5 6 26 8.5 26 11.5C26 15.1 22.8 18.3 17.5 23.1L16 24.5Z" fill="white" fill-opacity="0.2"/>
+
+    <path d="M8 16L11 13L14 19L18 11L21 17L24 14" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
