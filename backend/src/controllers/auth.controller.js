@@ -4,6 +4,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const redis = require('../config/cache');
 
+/**
+ * @desc Register a new user
+ * @route POST /api/auth/register
+ * @access Public
+ */
 async function registerUser(req, res) {
     const { username, email, password } = req.body;
 
@@ -46,6 +51,11 @@ async function registerUser(req, res) {
     });
 }
 
+/**
+ * @desc Login a user
+ * @route POST /api/auth/login
+ * @access Public
+ */
 async function loginUser(req, res) {
     const { email, username, password } = req.body;
 
@@ -90,6 +100,11 @@ async function loginUser(req, res) {
     });
 }
 
+/**
+ * @desc Get current user
+ * @route GET /api/auth/get-me
+ * @access Private
+ */
 async function getMe(req, res) {
     const user = await userModel.findById(req.user.id);
     res.status(200).json({
@@ -98,6 +113,11 @@ async function getMe(req, res) {
     });
 }
 
+/**
+ * @desc Logout a user
+ * @route POST /api/auth/logout
+ * @access Private
+ */
 async function logoutUser(req, res) {
     const token = req.cookies.token;
 
@@ -106,7 +126,7 @@ async function logoutUser(req, res) {
     await redis.set(token, Date.now().toString(), 'EX', 60 * 60);
 
     res.status(200).json({
-        message: 'user logout successfully',
+        message: 'User Logout Successfully',
     });
 }
 

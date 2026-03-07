@@ -43,22 +43,22 @@ async function uploadSong(req, res) {
     }
 }
 
+/**
+ * Get a song
+ * @route GET /api/songs
+ */
 async function getSong(req, res) {
     try {
         const { mood } = req.query;
 
-        const song = await songModel.find({
-            mood,
-        });
+        const songs = await songModel.find({ mood });
 
         res.status(200).json({
             message: 'Songs fetched successfully',
-            song,
+            songs,
         });
     } catch (error) {
-
         console.error('Error in getSong:', error);
-
         res.status(500).json({ message: 'Internal server error during song fetch' });
     }
 }

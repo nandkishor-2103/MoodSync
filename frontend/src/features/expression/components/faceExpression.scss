@@ -1,0 +1,253 @@
+.camera-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px 24px 24px;
+    gap: 0;
+
+    /* ── Header label ── */
+    &__label {
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #dd4200;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        &::before,
+        &::after {
+            content: '';
+            display: block;
+            width: 28px;
+            height: 1px;
+            background: rgba(221, 66, 0, 0.4);
+        }
+    }
+
+    /* ── Camera frame ── */
+    &__frame {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        width: 420px;
+        aspect-ratio: 4 / 3;
+        background: #111;
+        box-shadow:
+            0 0 0 2px rgba(221, 66, 0, 0.25),
+            0 20px 60px rgba(0, 0, 0, 0.7);
+
+        /* Corner accent decorations */
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: #dd4200;
+            border-style: solid;
+            z-index: 2;
+        }
+
+        &::before {
+            top: 10px;
+            left: 10px;
+            border-width: 2px 0 0 2px;
+            border-radius: 4px 0 0 0;
+        }
+
+        &::after {
+            bottom: 10px;
+            right: 10px;
+            border-width: 0 2px 2px 0;
+            border-radius: 0 0 4px 0;
+        }
+    }
+
+    /* Extra corner pieces via wrapper pseudo */
+    &__frame-inner {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        pointer-events: none;
+
+        &::before,
+        &::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: #dd4200;
+            border-style: solid;
+        }
+
+        &::before {
+            top: 10px;
+            right: 10px;
+            border-width: 2px 2px 0 0;
+            border-radius: 0 4px 0 0;
+        }
+
+        &::after {
+            bottom: 10px;
+            left: 10px;
+            border-width: 0 0 2px 2px;
+            border-radius: 0 0 0 4px;
+        }
+    }
+
+    &__video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transform: scaleX(-1); // mirror effect like a selfie camera
+    }
+
+    /* Live indicator dot */
+    &__live {
+        position: absolute;
+        top: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(6px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 3px 10px 3px 7px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #fff;
+
+        span.dot {
+            width: 6px;
+            height: 6px;
+            background: #ff3b30;
+            border-radius: 50%;
+            animation: live-pulse 1.4s ease-in-out infinite;
+        }
+    }
+
+    /* ── Expression badge ── */
+    &__expression {
+        margin-top: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    &__mood-label {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: #f1f1f1;
+        letter-spacing: 0.01em;
+    }
+
+    &__mood-badge {
+        background: rgba(221, 66, 0, 0.14);
+        border: 1px solid rgba(221, 66, 0, 0.35);
+        color: #dd4200;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+
+    /* ── Detect button ── */
+    &__detect-btn {
+        margin-top: 20px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #dd4200, #ff5e20);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 13px 36px;
+        font-size: 0.92rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        overflow: hidden;
+        transition:
+            transform 0.18s ease,
+            box-shadow 0.18s ease;
+        box-shadow: 0 4px 18px rgba(221, 66, 0, 0.4);
+
+        svg {
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        /* Shimmer sweep on hover */
+        &::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.18) 50%, transparent 65%);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 26px rgba(221, 66, 0, 0.55);
+
+            svg {
+                transform: scale(1.15);
+            }
+
+            &::after {
+                transform: translateX(100%);
+            }
+        }
+
+        &:active {
+            transform: translateY(0px);
+            box-shadow: 0 3px 12px rgba(221, 66, 0, 0.4);
+        }
+    }
+
+    &__hint {
+        margin-top: 10px;
+        font-size: 0.72rem;
+        color: #555;
+        letter-spacing: 0.02em;
+    }
+}
+
+@keyframes live-pulse {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.4;
+        transform: scale(0.75);
+    }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .camera-section {
+        padding: 20px 12px 16px;
+
+        &__frame {
+            width: 100%;
+        }
+    }
+}

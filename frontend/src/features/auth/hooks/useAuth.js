@@ -1,22 +1,21 @@
-import {login, register, getMe, logout} from "../services/auth.api.js";
-import {useContext, useEffect} from "react";
-import {AuthContext} from "../auth.context.jsx";
-
+import { login, register, getMe, logout } from '../services/auth.api.js';
+import { useContext, useEffect } from 'react';
+import { AuthContext } from '../auth.context.jsx';
 
 export const useAuth = () => {
     const context = useContext(AuthContext);
-    const {user, setUser, loading, setLoading} = context;
+    const { user, setUser, loading, setLoading } = context;
 
-    async function handelRegister({username, email, password}) {
+    async function handelRegister({ username, email, password }) {
         setLoading(true);
-        const data = await register({username, email, password});
+        const data = await register({ username, email, password });
         setUser(data.user);
         setLoading(false);
     }
 
-    async function handelLogin({username, email, password}) {
+    async function handelLogin({ username, email, password }) {
         setLoading(true);
-        const data = await login({username, email, password});
+        const data = await login({ username, email, password });
         setUser(data.user);
         setLoading(false);
     }
@@ -36,10 +35,22 @@ export const useAuth = () => {
     }
 
     useEffect(() => {
-        handelGetMe().then();
+        handelGetMe()
+            .then(() => {
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error('Failed to fetch user:', error);
+                setLoading(false);
+            });
     }, []);
 
-    return ({
-        user, loading, handelRegister, handelLogin, handelGetMe, handelLogout
-    })
-}
+    return {
+        user,
+        loading,
+        handelRegister,
+        handelLogin,
+        handelGetMe,
+        handelLogout,
+    };
+};
