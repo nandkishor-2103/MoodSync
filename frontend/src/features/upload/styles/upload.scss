@@ -1,0 +1,391 @@
+.upload-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 16px;
+    background: transparent;
+}
+
+.upload-card {
+    width: 100%;
+    max-width: 500px;
+    background: rgba(30, 30, 30, 0.85);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 20px;
+    padding: 40px 36px;
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.55),
+        0 0 0 1px rgba(221, 66, 0, 0.06);
+
+    &__back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #777;
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-decoration: none;
+        margin-bottom: 24px;
+        transition: all 0.2s ease;
+
+        svg {
+            transition: transform 0.2s ease;
+        }
+
+        &:hover {
+            color: #dd4200;
+
+            svg {
+                transform: translateX(-4px);
+            }
+        }
+    }
+
+    &__header {
+        text-align: center;
+        margin-bottom: 32px;
+
+        .upload-card__brand {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+
+            img {
+                filter: drop-shadow(0 0 15px rgba(221, 66, 0, 0.3));
+            }
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f1f1f1;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        p {
+            font-size: 0.88rem;
+            color: #777;
+            margin: 0;
+            line-height: 1.4;
+        }
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    // ── File Dropzone ──
+    &__dropzone {
+        position: relative;
+        border: 2px dashed rgba(255, 255, 255, 0.15);
+        border-radius: 14px;
+        padding: 40px 20px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.03);
+        transition: all 0.2s ease;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+
+        &:hover,
+        &--active {
+            border-color: rgba(221, 66, 0, 0.5);
+            background: rgba(221, 66, 0, 0.05);
+
+            svg {
+                color: #dd4200;
+            }
+        }
+
+        svg {
+            color: #666;
+            margin-bottom: 4px;
+            transition: color 0.2s ease;
+        }
+
+        .dropzone-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e0e0e0;
+            margin: 0;
+
+            span {
+                color: #dd4200;
+                text-decoration: underline;
+                text-decoration-color: rgba(221, 66, 0, 0.4);
+                text-underline-offset: 3px;
+            }
+        }
+
+        .dropzone-subtext {
+            font-size: 0.75rem;
+            color: #555;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        // Hidden actual file input
+        input[type='file'] {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+    }
+
+    &__selected-file {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            overflow: hidden;
+
+            svg {
+                color: #dd4200;
+                flex-shrink: 0;
+            }
+
+            .file-name {
+                font-size: 0.9rem;
+                font-weight: 500;
+                color: #f1f1f1;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: #888;
+            padding: 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+
+            &:hover {
+                color: #ff4d4d;
+                background: rgba(255, 77, 77, 0.1);
+            }
+        }
+    }
+
+    // ── Mood Select ──
+    &__group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .custom-select {
+            position: relative;
+            width: 100%;
+            cursor: pointer;
+
+            &__trigger {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 13px 18px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.12);
+                border-radius: 12px;
+                color: #f0f0f0;
+                font-size: 0.95rem;
+                font-weight: 500;
+                transition: all 0.2s ease;
+
+                svg {
+                    color: #888;
+                    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                    stroke-width: 2.5; // Make arrow bolder for better identification
+                }
+
+                &:hover {
+                    border-color: rgba(221, 66, 0, 0.5);
+                    background: rgba(255, 255, 255, 0.08);
+                }
+            }
+
+            &--open {
+                .custom-select__trigger {
+                    border-color: #dd4200;
+                    box-shadow: 0 0 12px rgba(221, 66, 0, 0.15);
+
+                    svg {
+                        transform: rotate(180deg);
+                        color: #dd4200;
+                    }
+                }
+            }
+
+            &__options {
+                position: absolute;
+                top: calc(100% + 8px);
+                left: 0;
+                right: 0;
+                background: #1c1c1c;
+                border: 1px solid rgba(221, 66, 0, 0.4);
+                border-radius: 12px;
+                overflow: hidden;
+                z-index: 100;
+                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+                animation: selectFadeIn 0.2s ease-out;
+            }
+
+            .custom-option {
+                padding: 12px 18px;
+                color: #ababab;
+                font-size: 0.92rem;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    background: rgba(221, 66, 0, 0.15);
+                    color: #fff;
+                    padding-left: 24px;
+                }
+
+                &--selected {
+                    background: #dd4200;
+                    color: #fff;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+
+    // ── Submit Button ──
+    &__submit {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #dd4200, #ff5e20);
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition:
+            transform 0.16s ease,
+            box-shadow 0.16s ease,
+            opacity 0.2s;
+        box-shadow: 0 4px 18px rgba(221, 66, 0, 0.4);
+        margin-top: 8px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 26px rgba(221, 66, 0, 0.5);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 3px 12px rgba(221, 66, 0, 0.35);
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+    }
+
+    // ── Alert Messages ──
+    &__alert {
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.88rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        svg {
+            flex-shrink: 0;
+        }
+
+        &--error {
+            background: rgba(255, 77, 77, 0.1);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 77, 77, 0.2);
+        }
+
+        &--success {
+            background: rgba(46, 213, 115, 0.1);
+            color: #2ed573;
+            border: 1px solid rgba(46, 213, 115, 0.2);
+        }
+    }
+}
+
+@keyframes selectFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 500px) {
+    .upload-card {
+        padding: 32px 24px;
+        border-radius: 16px;
+
+        &__header h1 {
+            font-size: 1.5rem;
+        }
+    }
+}

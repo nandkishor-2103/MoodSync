@@ -56,11 +56,16 @@
         padding: 0;
         cursor: pointer;
         text-align: left;
+        overflow: hidden;
+
+        // Entrance Animation
+        animation: cardEntrance 0.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+        // animation-delay will be set via JS/SCSS for staggered effect
+
         transition:
             transform 0.18s ease,
             border-color 0.18s ease,
             box-shadow 0.18s ease;
-        overflow: hidden;
 
         &:hover {
             transform: translateY(-4px);
@@ -193,14 +198,58 @@
     }
 }
 
+@keyframes cardEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 // Responsive
 @media (max-width: 480px) {
     .song-list {
-        padding: 20px 12px 110px;
+        padding: 32px 16px 120px;
+
+        &__heading {
+            font-size: 1.05rem;
+            margin-bottom: 16px;
+        }
 
         &__grid {
-            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            grid-template-columns: repeat(2, 1fr); // Consistent 2-column grid
             gap: 12px;
+        }
+
+        &__card {
+            border-radius: 16px;
+        }
+
+        &__info {
+            padding: 10px;
+            gap: 4px;
+        }
+
+        &__title {
+            font-size: 0.8rem;
+        }
+
+        &__mood {
+            font-size: 0.65rem;
+            padding: 1px 6px;
+        }
+
+        &__play-overlay {
+            opacity: 1; // Show play overlay by default on mobile (since no hover)
+            background: rgba(0, 0, 0, 0.2);
+
+            img {
+                width: 24px;
+                height: 24px;
+            }
         }
     }
 }

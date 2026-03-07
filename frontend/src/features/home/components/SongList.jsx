@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSong } from '../hooks/useSong';
+import playIcon from '../../../assets/play.svg';
 import './songList.scss';
 
 const SongList = () => {
@@ -23,12 +24,13 @@ const SongList = () => {
                 <span className='song-list__count'>{songs.length}</span>
             </h2>
             <div className='song-list__grid'>
-                {songs.map(s => (
+                {songs.map((s, index) => (
                     <button
                         key={s._id}
                         className={`song-list__card ${activeSong?._id === s._id ? 'song-list__card--active' : ''}`}
                         onClick={() => selectSong(s)}
-                        title={`Play "${s.title}"`}>
+                        title={`Play "${s.title}"`}
+                        style={{ animationDelay: `${index * 0.05}s` }}>
                         <div className='song-list__img-wrap'>
                             <img src={s.posterUrl} alt={s.title} className='song-list__poster' />
                             <div className='song-list__play-overlay'>
@@ -41,9 +43,7 @@ const SongList = () => {
                                         <span />
                                     </span>
                                 ) : (
-                                    <svg viewBox='0 0 24 24' fill='currentColor' width='28' height='28'>
-                                        <path d='M8 5.14v14l11-7-11-7z' />
-                                    </svg>
+                                    <img src={playIcon} alt='Play' width='28' height='28' />
                                 )}
                             </div>
                         </div>

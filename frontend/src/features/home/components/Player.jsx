@@ -1,5 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { useSong } from '../hooks/useSong';
+import skipBackIcon from '../../../assets/skip-back.svg';
+import skipForwardIcon from '../../../assets/skip-forward.svg';
+import playIcon from '../../../assets/play.svg';
+import pauseIcon from '../../../assets/pause.svg';
+import volumeIcon from '../../../assets/volume.svg';
+import muteIcon from '../../../assets/mute.svg';
 import './player.scss';
 
 const SPEED_OPTIONS = [0.5, 0.75, 1, 1.25, 1.5, 2];
@@ -26,28 +32,18 @@ const Player = () => {
     const [volume, setVolume] = useState(1);
     const [showSpeed, setShowSpeed] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
+    const [isMinimized, setIsMinimized] = useState(false);
 
-    // Auto-play when a new song is selected
+    // Load new song when it changes, but don't auto-play
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio || !song?.url) return;
 
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCurrentTime(0);
+         
         setIsPlaying(false);
         audio.load();
-
-        const onCanPlay = () => {
-            audio
-                .play()
-                .then(() => setIsPlaying(true))
-                .catch(err => console.warn('Autoplay blocked:', err));
-        };
-
-        audio.addEventListener('canplay', onCanPlay, { once: true });
-
-        return () => {
-            audio.removeEventListener('canplay', onCanPlay);
-        };
     }, [song?.url]);
 
     const togglePlay = () => {
@@ -118,7 +114,20 @@ const Player = () => {
     if (!song) return null;
 
     return (
-        <div className='player'>
+        <div className={`player ${isMinimized ? 'player--minimized' : ''}`}>
+            {/* Toggle button for mobile/tablet */}
+            <button
+                className='player__toggle-btn'
+                onClick={() => setIsMinimized(!isMinimized)}
+                title={isMinimized ? 'Expand Player' : 'Minimize Player'}>
+                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2.5' width='16' height='16'>
+                    {isMinimized ? (
+                        <polyline points='18 15 12 9 6 15' /> // Up arrow
+                    ) : (
+                        <polyline points='6 9 12 15 18 9' /> // Down arrow
+                    )}
+                </svg>
+            </button>
             <audio
                 ref={audioRef}
                 src={song.url}
@@ -172,10 +181,7 @@ const Player = () => {
 
                 {/* Backward 5s */}
                 <button className='player__btn player__btn--skip' onClick={() => skip(-5)} title='Back 5s'>
-                    <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' width='20' height='20'>
-                        <path d='M1 4v6h6' />
-                        <path d='M3.51 15a9 9 0 1 0 .49-3.6' />
-                    </svg>
+                    <img src={skipBackIcon} alt='Back' width='20' height='20' />
                     <span>5s</span>
                 </button>
 
@@ -185,37 +191,25 @@ const Player = () => {
                     onClick={togglePlay}
                     title={isPlaying ? 'Pause' : 'Play'}>
                     {isPlaying ? (
-                        <svg viewBox='0 0 24 24' fill='currentColor' width='28' height='28'>
-                            <rect x='6' y='4' width='4' height='16' rx='1' />
-                            <rect x='14' y='4' width='4' height='16' rx='1' />
-                        </svg>
+                        <img src={pauseIcon} alt='Pause' width='28' height='28' />
                     ) : (
-                        <svg viewBox='0 0 24 24' fill='currentColor' width='28' height='28'>
-                            <path d='M8 5.14v14l11-7-11-7z' />
-                        </svg>
+                        <img src={playIcon} alt='Play' width='28' height='28' />
                     )}
                 </button>
 
                 {/* Forward 5s */}
                 <button className='player__btn player__btn--skip' onClick={() => skip(5)} title='Forward 5s'>
                     <span>5s</span>
-                    <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2' width='20' height='20'>
-                        <path d='M23 4v6h-6' />
-                        <path d='M20.49 15a9 9 0 1 1-.49-3.6' />
-                    </svg>
+                    <img src={skipForwardIcon} alt='Forward' width='20' height='20' />
                 </button>
 
                 {/* Volume */}
                 <div className='player__volume'>
                     <button className='player__btn player__btn--vol' onClick={toggleMute} title='Mute'>
                         {isMuted || volume === 0 ? (
-                            <svg viewBox='0 0 24 24' fill='currentColor' width='20' height='20'>
-                                <path d='M16.5 12A4.5 4.5 0 0 0 14 7.97v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.87 8.87 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06A8.99 8.99 0 0 0 17.73 18L19 19.27 20.27 18 5.27 3 4.27 3zM12 4L9.91 6.09 12 8.18V4z' />
-                            </svg>
+                            <img src={muteIcon} alt='Mute' width='20' height='20' />
                         ) : (
-                            <svg viewBox='0 0 24 24' fill='currentColor' width='20' height='20'>
-                                <path d='M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 7.97v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z' />
-                            </svg>
+                            <img src={volumeIcon} alt='Volume' width='20' height='20' />
                         )}
                     </button>
                     <input

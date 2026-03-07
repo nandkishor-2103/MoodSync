@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#dd4200;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff7841;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Ring -->
+  <circle cx="50" cy="50" r="45" stroke="url(#logo-gradient)" stroke-width="4" opacity="0.3" />
+
+  <!-- Sync Wave / Music Note stylized -->
+  <path d="M30 50 C 35 30, 45 30, 50 50 C 55 70, 65 70, 70 50" stroke="url(#logo-gradient)" stroke-width="8" stroke-linecap="round" fill="none" />
+
+  <!-- Mood Smile / Sound Wave -->
+  <path d="M25 60 Q 50 85 75 60" stroke="url(#logo-gradient)" stroke-width="6" stroke-linecap="round" fill="none" />
+
+  <!-- Play Head / Accent -->
+  <circle cx="50" cy="35" r="5" fill="url(#logo-gradient)" />
+</svg>

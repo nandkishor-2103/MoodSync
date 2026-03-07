@@ -1,4 +1,5 @@
 import { getSong } from '../services/song.api';
+import { addToHistory } from '../services/history.api';
 import { useContext } from 'react';
 import { SongContext } from '../song.context';
 
@@ -23,6 +24,11 @@ export const useSong = () => {
 
     function selectSong(songItem) {
         setSong(songItem); // this triggers the Player to show & play
+
+        // Log to history in background
+        if (songItem?._id) {
+            addToHistory(songItem._id).catch(err => console.error('History log failed:', err));
+        }
     }
 
     return { loading, songs, song, handelGetSong, selectSong };

@@ -21,10 +21,10 @@ router.post('/login', authController.loginUser);
 
 /**
  * @desc Get current user
- * @route GET /api/auth/me
- * @access Private
+ * @route GET /api/auth/get-me
+ * @access Public (Self-verifying)
  */
-router.get('/get-me', authMiddleware.authUser, authController.getMe);
+router.get('/get-me', authController.getMe);
 
 /**
  * @desc Logout a user

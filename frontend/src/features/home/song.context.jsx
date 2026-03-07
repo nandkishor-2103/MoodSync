@@ -1,6 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useState } from 'react';
 
-export const SongContext = createContext();
+export const SongContext = createContext(null);
 
 export const SongContextProvider = ({ children }) => {
     // list of songs for detected mood

@@ -12,13 +12,17 @@ const redis = require('../config/cache');
 async function registerUser(req, res) {
     const { username, email, password } = req.body;
 
-    const isAlreadyRegistered = await userModel.findOne({
-        $or: [{ username }, { email }],
-    });
-
-    if (isAlreadyRegistered) {
+    const existingEmail = await userModel.findOne({ email });
+    if (existingEmail) {
         return res.status(409).json({
-            message: 'User with the same email or username already exists',
+            message: 'Email is already registered. Please use a different email or login.',
+        });
+    }
+
+    const existingUsername = await userModel.findOne({ username });
+    if (existingUsername) {
+        return res.status(409).json({
+            message: 'Username is already taken. Please choose another one.',
         });
     }
 
@@ -29,17 +33,6 @@ async function registerUser(req, res) {
         email,
         password: hash,
     });
-
-    const token = jwt.sign(
-        {
-            id: user._id,
-            username: user.username,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: '3d' },
-    );
-
-    res.cookie('token', token);
 
     return res.status(201).json({
         message: 'user registered successfully',
@@ -88,7 +81,12 @@ async function loginUser(req, res) {
         { expiresIn: '3d' },
     );
 
-    res.cookie('token', token);
+    res.cookie('token', token, {
+        maxAge: 3 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+    });
 
     return res.status(200).json({
         message: 'User looged in successfully',
@@ -101,16 +99,39 @@ async function loginUser(req, res) {
 }
 
 /**
- * @desc Get current user
+ * @desc Get current user (Soft-auth)
  * @route GET /api/auth/get-me
- * @access Private
+ * @access Public (Verifies inside)
  */
 async function getMe(req, res) {
-    const user = await userModel.findById(req.user.id);
-    res.status(200).json({
-        message: 'User fetched successfully',
-        user,
-    });
+    const token = req.cookies.token;
+
+    if (!token) {
+        return res.status(200).json({
+            message: 'Session not found',
+            user: null,
+        });
+    }
+
+    try {
+        const isTokenBlackListed = await redis.get(token);
+        if (isTokenBlackListed) {
+            return res.status(200).json({ message: 'Session invalid', user: null });
+        }
+
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await userModel.findById(decoded.id);
+
+        res.status(200).json({
+            message: 'User fetched successfully',
+            user,
+        });
+    } catch (error) {
+        res.status(200).json({
+            message: 'Session expired',
+            user: null,
+        });
+    }
 }
 
 /**
@@ -123,7 +144,8 @@ async function logoutUser(req, res) {
 
     res.clearCookie('token');
 
-    await redis.set(token, Date.now().toString(), 'EX', 60 * 60);
+    // Blacklist the token for 3 days (matches JWT/Cookie duration)
+    await redis.set(token, Date.now().toString(), 'EX', 3 * 24 * 60 * 60);
 
     res.status(200).json({
         message: 'User Logout Successfully',

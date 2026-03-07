@@ -1,0 +1,34 @@
+
+> moodsync@0.0.0 lint
+> eslint .
+
+
+C:\Users\Nandkishor\Desktop\My WorkSpace\FullStack Project\MoodSync\frontend\src\features\auth\hooks\useAuth.js
+  2:22  error  'useEffect' is defined but never used. Allowed unused vars must match /^[A-Z_]/u  no-unused-vars
+
+C:\Users\Nandkishor\Desktop\My WorkSpace\FullStack Project\MoodSync\frontend\src\features\expression\components\FaceExpression.jsx
+  18:31  warning  The ref value 'landmarkerRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'landmarkerRef.current' to a variable inside the effect, and use that variable in the cleanup function  react-hooks/exhaustive-deps
+  21:26  warning  The ref value 'videoRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'videoRef.current' to a variable inside the effect, and use that variable in the cleanup function            react-hooks/exhaustive-deps
+
+C:\Users\Nandkishor\Desktop\My WorkSpace\FullStack Project\MoodSync\frontend\src\features\home\components\Player.jsx
+  42:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  40 |         if (!audio || !song?.url) return;
+  41 |
+> 42 |         setCurrentTime(0);
+     |         ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  43 |         setIsPlaying(false);
+  44 |         audio.load();
+  45 |     }, [song?.url]);  react-hooks/set-state-in-effect
+
+C:\Users\Nandkishor\Desktop\My WorkSpace\FullStack Project\MoodSync\frontend\src\features\home\song.context.jsx
+  3:14  error  Fast refresh only works when a file only exports components. Move your React context(s) to a separate file  react-refresh/only-export-components
+
+✖ 5 problems (3 errors, 2 warnings)
+
