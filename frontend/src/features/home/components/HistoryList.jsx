@@ -22,7 +22,18 @@ const HistoryList = () => {
         }
     };
 
+    // Always fetch on mount (covers navigating back from /profile)
     useEffect(() => {
+        fetchHistory();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Also re-fetch when the active song changes (a new song started playing)
+    const isMounted = React.useRef(false);
+    useEffect(() => {
+        if (!isMounted.current) {
+            isMounted.current = true;
+            return; // skip on initial mount — the above effect handles it
+        }
         fetchHistory();
     }, [activeSong]); // Re-fetch when a new song starts playing to keep it fresh
 

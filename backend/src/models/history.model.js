@@ -7,6 +7,10 @@ const historySchema = new mongoose.Schema(
             ref: 'user',
             required: true,
         },
+        username: {
+            type: String,
+            required: true, // denormalized for quick reads — who listened
+        },
         song: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'songs',

@@ -89,7 +89,7 @@ async function loginUser(req, res) {
     });
 
     return res.status(200).json({
-        message: 'User looged in successfully',
+        message: 'User logged in successfully',
         user: {
             id: user._id,
             username: user.username,
@@ -144,7 +144,6 @@ async function logoutUser(req, res) {
 
     res.clearCookie('token');
 
-    // Blacklist the token for 3 days (matches JWT/Cookie duration)
     await redis.set(token, Date.now().toString(), 'EX', 3 * 24 * 60 * 60);
 
     res.status(200).json({
@@ -152,4 +151,48 @@ async function logoutUser(req, res) {
     });
 }
 
-module.exports = { registerUser, loginUser, getMe, logoutUser };
+/**
+ * @desc Update current user (email, username, password)
+ * @route PATCH /api/auth/update-me
+ * @access Private
+ */
+async function updateUser(req, res) {
+    const { username, email, password } = req.body;
+    const userId = req.user.id;
+
+    if (email) {
+        const existingEmail = await userModel.findOne({ email, _id: { $ne: userId } });
+        if (existingEmail) {
+            return res.status(409).json({
+                message: 'Email is already registered by another account.',
+            });
+        }
+    }
+
+    if (username) {
+        const existingUsername = await userModel.findOne({ username, _id: { $ne: userId } });
+        if (existingUsername) {
+            return res.status(409).json({
+                message: 'Username is already taken. Please choose another one.',
+            });
+        }
+    }
+
+    const updateFields = {};
+    if (username) updateFields.username = username;
+    if (email) updateFields.email = email;
+    if (password) updateFields.password = await bcrypt.hash(password, 10);
+
+    const updatedUser = await userModel.findByIdAndUpdate(userId, { $set: updateFields }, { returnDocument: 'after' });
+
+    return res.status(200).json({
+        message: 'Profile updated successfully',
+        user: {
+            _id: updatedUser._id,
+            username: updatedUser.username,
+            email: updatedUser.email,
+        },
+    });
+}
+
+module.exports = { registerUser, loginUser, getMe, logoutUser, updateUser };

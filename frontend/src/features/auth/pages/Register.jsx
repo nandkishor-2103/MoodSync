@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import '../styles/auth.scss';
 import FormGroup from '../components/FormGroup.jsx';
 import { Link, useNavigate } from 'react-router';
 import { useAuth } from '../hooks/useAuth.js';
 import { toast } from 'react-hot-toast';
+import { validateUsername, validateEmail, validatePassword } from '../utils/validators.js';
 
 function Register() {
     const [username, setUsername] = useState('');
@@ -14,22 +15,31 @@ function Register() {
 
     async function handleSubmit(e) {
         e.preventDefault();
+
+        const trimmedUsername = username.trim();
+        const trimmedEmail = email.trim();
+
+        if (!validateUsername(trimmedUsername)) return;
+        if (!validateEmail(trimmedEmail)) return;
+        if (!validatePassword(password)) return;
+
+        const toastId = toast.loading('Creating your account…');
         try {
-            await handelRegister({ username, email, password });
-            toast.success('Registered successfully! Please login.');
+            await handelRegister({ username: trimmedUsername, email: trimmedEmail, password });
+            toast.success('Account created! Please sign in. 🎉', { id: toastId });
             setUsername('');
             setEmail('');
             setPassword('');
             navigate('/login');
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Registration failed');
+            const msg = error.response?.data?.message || 'Registration failed. Please try again.';
+            toast.error(msg, { id: toastId });
         }
     }
 
     return (
         <main className='auth-page'>
             <div className='auth-card'>
-                {/* Brand */}
                 <div className='auth-card__brand'>
                     <img src='/logo.svg' alt='MoodSync Logo' width='36' height='36' />
                     <span className='auth-card__logo-text'>
@@ -37,21 +47,20 @@ function Register() {
                     </span>
                 </div>
 
-                {/* Heading */}
                 <h1 className='auth-card__heading'>Create account</h1>
                 <p className='auth-card__sub'>Join MoodSync and let your mood pick your music</p>
 
                 <div className='auth-card__divider' />
 
-                {/* Form */}
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} noValidate>
                     <FormGroup
                         value={username}
                         onChange={e => setUsername(e.target.value)}
-                        label='Full Name'
+                        label='Username'
                         type='text'
-                        placeholder='Your name'
-                        required
+                        placeholder='Choose a username'
+                        autoComplete='off'
+                        id='register-username'
                     />
                     <FormGroup
                         value={email}
@@ -59,8 +68,8 @@ function Register() {
                         label='Email'
                         type='email'
                         placeholder='you@example.com'
-                        autoComplete='email'
-                        required
+                        autoComplete='off'
+                        id='register-email'
                     />
                     <FormGroup
                         value={password}
@@ -69,7 +78,7 @@ function Register() {
                         type='password'
                         placeholder='Min. 8 characters'
                         autoComplete='new-password'
-                        required
+                        id='register-password'
                     />
                     <button type='submit' className='auth-btn' disabled={loading}>
                         {loading && <span className='auth-btn__spinner' />}

@@ -56,4 +56,13 @@ export async function logout() {
     return response.data;
 }
 
+export async function updateMe({ username, email, password }) {
+    const response = await api.patch('/api/auth/update-me', {
+        username,
+        email,
+        password,
+    });
+    return response.data;
+}
+
 export default api;

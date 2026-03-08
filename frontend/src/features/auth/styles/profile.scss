@@ -1,4 +1,4 @@
-.auth-page {
+.profile-page {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -11,9 +11,9 @@
 }
 
 // ── Card ──────────────────────────────────────
-.auth-card {
+.profile-card {
     width: 100%;
-    max-width: 440px;
+    max-width: 480px;
     background: rgba(30, 30, 30, 0.85);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
@@ -24,28 +24,58 @@
         0 24px 60px rgba(0, 0, 0, 0.55),
         0 0 0 1px rgba(221, 66, 0, 0.08);
 
-    // ── Brand mark ──
-    &__brand {
-        display: flex;
+    // ── Back Button ──
+    &__back {
+        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        gap: 8px;
-        margin-bottom: 28px;
+        gap: 6px;
+        color: #666;
+        font-size: 0.82rem;
+        font-weight: 600;
+        text-decoration: none;
+        margin-bottom: 24px;
+        transition: color 0.15s;
+        background: none;
+        border: none;
+        padding: 4px 0;
+        cursor: pointer;
 
-        svg {
-            flex-shrink: 0;
+        img {
+            width: 14px;
+            height: 14px;
+            filter: brightness(0) invert(0.4);
+            transition: filter 0.15s;
+        }
+
+        &:hover {
+            color: #dd4200;
+
+            img {
+                filter: brightness(0) saturate(100%) invert(32%) sepia(98%) saturate(2000%) hue-rotate(5deg)
+                    brightness(90%) contrast(110%);
+            }
         }
     }
 
-    &__logo-text {
-        font-size: 1.15rem;
-        font-weight: 800;
-        letter-spacing: -0.01em;
-        color: #f1f1f1;
+    // ── Avatar ──
+    &__avatar {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(221, 66, 0, 0.25), rgba(221, 66, 0, 0.08));
+        border: 2px solid rgba(221, 66, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 14px;
+    }
 
-        span {
-            color: #dd4200;
-        }
+    &__avatar-initial {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #dd4200;
+        line-height: 1;
+        display: block;
     }
 
     // ── Heading ──
@@ -54,14 +84,14 @@
         font-weight: 700;
         color: #f1f1f1;
         letter-spacing: -0.02em;
-        margin-bottom: 6px;
+        margin-bottom: 4px;
     }
 
     &__sub {
         font-size: 0.83rem;
-        color: #666;
+        color: #555;
         margin-bottom: 26px;
-        margin-top: 0 !important;
+        margin-top: 0;
         line-height: 1.5;
     }
 
@@ -69,33 +99,22 @@
     &__divider {
         height: 1px;
         background: rgba(255, 255, 255, 0.07);
-        margin: 22px 0;
+        margin: 20px 0;
     }
 
-    // ── Footer link ──
-    &__footer {
-        text-align: center;
-        font-size: 0.82rem;
-        color: #555;
-        margin-top: 18px !important;
-
-        a {
-            color: #dd4200 !important;
-            font-weight: 600;
-            text-decoration: none;
-            margin-left: 4px;
-            transition: color 0.15s;
-
-            &:hover {
-                color: #ff5e20 !important;
-                text-decoration: underline;
-            }
-        }
+    // ── Section label ──
+    &__section-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: #444;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
     }
 }
 
 // ── Form group ────────────────────────────────
-.auth-form-group {
+.profile-form-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -109,27 +128,28 @@
         text-transform: uppercase;
     }
 
-    .auth-input-wrap {
+    .profile-input-wrap {
         position: relative;
         display: flex;
         align-items: center;
 
-        .auth-input-icon {
+        .profile-input-icon {
             position: absolute;
             left: 13px;
-            color: #555;
             pointer-events: none;
             display: flex;
             align-items: center;
 
             img {
-                filter: brightness(0) invert(0.45);
+                width: 16px;
+                height: 16px;
+                filter: brightness(0) invert(0.4);
             }
         }
 
         input {
             width: 100%;
-            padding: 12px 44px 12px 40px; // right padding reserves room for eye button
+            padding: 12px 44px 12px 40px; // right padding for eye btn
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 10px;
@@ -153,18 +173,16 @@
             }
         }
     }
-}
 
-// ── Form field hint text ──────────────────────
-.auth-form-hint {
-    font-size: 0.75rem;
-    color: #666;
-    letter-spacing: 0.01em;
-    margin-top: 2px;
+    .profile-hint {
+        font-size: 0.75rem;
+        color: #444;
+        margin-top: 2px;
+    }
 }
 
 // ── Eye toggle button ──────────────────────────
-.auth-eye-btn {
+.profile-eye-btn {
     position: absolute;
     right: 12px;
     background: none;
@@ -194,8 +212,8 @@
     }
 }
 
-// ── Auth submit button ─────────────────────────
-.auth-btn {
+// ── Save Button ────────────────────────────────
+.profile-save-btn {
     width: 100%;
     padding: 13px;
     border: none;
@@ -212,7 +230,7 @@
         transform 0.16s ease,
         box-shadow 0.16s ease;
     box-shadow: 0 4px 18px rgba(221, 66, 0, 0.4);
-    margin-top: 6px;
+    margin-top: 8px;
 
     &::after {
         content: '';
@@ -243,65 +261,69 @@
         transform: none;
     }
 
-    .auth-btn__spinner {
+    &__spinner {
         display: inline-block;
         width: 16px;
         height: 16px;
         border: 2px solid rgba(255, 255, 255, 0.3);
         border-top-color: #fff;
         border-radius: 50%;
-        animation: auth-spin 0.7s linear infinite;
+        animation: profile-spin 0.7s linear infinite;
         vertical-align: middle;
         margin-right: 8px;
     }
 }
 
-@keyframes auth-spin {
+@keyframes profile-spin {
     to {
         transform: rotate(360deg);
     }
 }
 
 // ── Responsive ────────────────────────────────
-@media (max-width: 480px) {
-    .auth-page {
+@media (max-width: 540px) {
+    .profile-page {
         padding: 16px 12px;
         align-items: flex-start;
-        padding-top: 32px;
+        padding-top: 24px;
     }
 
-    .auth-card {
+    .profile-card {
         padding: 28px 20px 24px;
         border-radius: 16px;
         max-width: 100%;
 
         &__heading {
-            font-size: 1.35rem;
+            font-size: 1.4rem;
         }
 
-        &__sub {
-            font-size: 0.8rem;
+        &__avatar {
+            width: 58px;
+            height: 58px;
+        }
+
+        &__avatar-initial {
+            font-size: 1.5rem;
         }
     }
 
-    .auth-form-group {
+    .profile-form-group {
         margin-bottom: 14px;
 
-        .auth-input-wrap input {
-            font-size: 16px; // Prevents iOS auto-zoom on focus
+        .profile-input-wrap input {
+            font-size: 16px; // Prevents iOS auto-zoom
             padding: 13px 44px 13px 40px;
         }
     }
 
-    .auth-btn {
+    .profile-save-btn {
         padding: 14px;
-        font-size: 0.95rem;
     }
 }
 
 @media (max-width: 360px) {
-    .auth-card {
-        padding: 24px 16px 20px;
+    .profile-card {
+        padding: 22px 14px 20px;
         border-radius: 14px;
     }
 }
