@@ -7,15 +7,15 @@ import { toast } from 'react-hot-toast';
 
 function Login() {
     const { loading, handelLogin } = useAuth();
-    const [email, setEmail] = useState('');
+    const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
     async function handelSubmit(e) {
         e.preventDefault();
 
-        if (!email.trim()) {
-            toast.error('Please enter your email address.');
+        if (!identifier.trim()) {
+            toast.error('Please enter your email or username.');
             return;
         }
         if (!password) {
@@ -25,9 +25,13 @@ function Login() {
 
         const toastId = toast.loading('Signing you in…');
         try {
-            await handelLogin({ email: email.trim(), password });
+            await handelLogin({ 
+                email: identifier.trim(), 
+                username: identifier.trim(), 
+                password 
+            });
             toast.success('Welcome back! 🎵', { id: toastId });
-            setEmail('');
+            setIdentifier('');
             setPassword('');
             navigate('/');
         } catch (error) {
@@ -53,13 +57,13 @@ function Login() {
 
                 <form onSubmit={handelSubmit} noValidate>
                     <FormGroup
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        label='Email'
-                        type='email'
-                        placeholder='you@example.com'
+                        value={identifier}
+                        onChange={e => setIdentifier(e.target.value)}
+                        label='Email or Username'
+                        type='text'
+                        placeholder='Enter your email or username'
                         autoComplete='off'
-                        id='login-email'
+                        id='login-identifier'
                     />
                     <FormGroup
                         value={password}
